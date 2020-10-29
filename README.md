@@ -31,3 +31,9 @@ sonarqube 钉钉机器人插件
 ![图片描述](https://i.niupic.com/images/2020/10/29/8VFR.jpg)
 
 名称随便填，URL填 `http://插件部署电脑的IP:9001/dingtalk?access_token=这里填刚才复制的机器人的token`
+
+#### 4. 大功告成
+
+在SonarQube完成代码扫描后，就会推送消息到钉钉了
+
+![图片描述](https://i.niupic.com/images/2020/10/29/8VG3.jpg)
