@@ -84,5 +84,6 @@ func dingTalkHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/dingtalk", dingTalkHandler)
-	http.ListenAndServe(":9001", nil)
+	log.Println("Server started on port(s): 9001 (http)")
+	log.Fatal(http.ListenAndServe(":9001", nil))
 }

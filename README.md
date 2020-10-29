@@ -2,13 +2,31 @@
 
 sonarqube 钉钉机器人插件
 
-### 使用方法
+## 使用方法
 
-#### 1. 部署插件
+### 1. 部署插件
 
-下载对应操作系统的插件，运行即可
+#### windows
 
-#### 2. 添加钉钉群机器人
+双击运行即可
+
+[sonar-dingtalk-plugin-windows.exe](https://github.com/viodo/sonar-dingtalk-plugin/releases/download/v1.0.0/sonar-dingtalk-plugin-1.0.0-windows.exe)
+
+#### Linux
+
+```
+wget https://github.com/viodo/sonar-dingtalk-plugin/releases/download/v1.0.0/sonar-dingtalk-plugin-1.0.0-linux
+
+nohup ./sonar-dingtalk-plugin-1.0.0-linux &
+```
+#### Mac
+
+```shell
+wget https://github.com/viodo/sonar-dingtalk-plugin/releases/download/v1.0.0/sonar-dingtalk-plugin-1.0.0-mac
+nohup ./sonar-dingtalk-plugin-1.0.0-mac &
+```
+
+### 2. 添加钉钉群机器人
 
 在钉钉群设置->智能群助手->添加自定义机器人
 
@@ -20,7 +38,7 @@ sonarqube 钉钉机器人插件
 
 ![图片描述](https://i.niupic.com/images/2020/10/29/8VFN.jpg)
 
-#### 3. 设置SonarQube
+### 3. 设置SonarQube
 
 点击`项目配置`下的`网络调用`
 
@@ -32,7 +50,7 @@ sonarqube 钉钉机器人插件
 
 名称随便填，URL填 `http://插件部署电脑的IP:9001/dingtalk?access_token=这里填刚才复制的机器人的token`
 
-#### 4. 大功告成
+### 4. 大功告成
 
 在SonarQube完成代码扫描后，就会推送消息到钉钉了
 
