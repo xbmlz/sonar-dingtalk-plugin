@@ -23,6 +23,7 @@ nohup ./sonar-dingtalk-plugin-1.0.0-linux &
 
 ```shell
 wget https://github.com/viodo/sonar-dingtalk-plugin/releases/download/v1.0.0/sonar-dingtalk-plugin-1.0.0-mac
+
 nohup ./sonar-dingtalk-plugin-1.0.0-mac &
 ```
 
