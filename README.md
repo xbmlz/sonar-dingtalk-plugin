@@ -6,7 +6,7 @@ sonarqube 钉钉机器人插件
 
 ### 1. 部署插件
 
-#### windows
+#### Windows
 
 双击运行即可
 
@@ -17,12 +17,16 @@ sonarqube 钉钉机器人插件
 ```
 wget https://github.com/viodo/sonar-dingtalk-plugin/releases/download/v1.0.0/sonar-dingtalk-plugin-1.0.0-linux
 
+chmod 777 sonar-dingtalk-plugin-1.0.0-linux
+
 nohup ./sonar-dingtalk-plugin-1.0.0-linux &
 ```
 #### Mac
 
 ```shell
 wget https://github.com/viodo/sonar-dingtalk-plugin/releases/download/v1.0.0/sonar-dingtalk-plugin-1.0.0-mac
+
+chmod 777 sonar-dingtalk-plugin-1.0.0-mac
 
 nohup ./sonar-dingtalk-plugin-1.0.0-mac &
 ```
