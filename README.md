@@ -1,6 +1,10 @@
-# sonar-dingtalk-plugin
+# SonarQube 钉钉机器人插件
 
-SonarQube 钉钉机器人插件
+## 仓库地址
+
+[https://github.com/viodo/sonar-dingtalk-plugin](https://github.com/viodo/sonar-dingtalk-plugin)
+
+觉得有用的别忘了点个star哦 _
 
 ## 使用方法
 
@@ -60,10 +64,3 @@ nohup ./sonar-dingtalk-plugin-1.0.0-mac &
 在SonarQube完成代码扫描后，就会推送消息到钉钉了
 
 ![图片描述](https://i.niupic.com/images/2020/10/29/8VG3.jpg)
-
-
-### 5. 仓库地址
-
-https://github.com/viodo/sonar-dingtalk-plugin
-
-喜欢的点个star哦 ^_^
