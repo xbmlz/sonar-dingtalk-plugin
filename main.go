@@ -21,6 +21,8 @@ func dingTalkHandler(w http.ResponseWriter, r *http.Request) {
 	sonarUrl := sonarRsp["serverUrl"]
 	// 项目名称
 	projectName := sonarRsp["project"].(map[string]interface{})["name"]
+	// 项目标识
+	projectKey := sonarRsp["project"].(map[string]interface{})["key"]
 	// 分支名称
 	branchName := sonarRsp["branch"].(map[string]interface{})["name"]
 	// sonar prop
@@ -30,7 +32,7 @@ func dingTalkHandler(w http.ResponseWriter, r *http.Request) {
 
 	// get sonar info
 	resp, _ := http.Get(fmt.Sprintf("%s/api/measures/search?projectKeys=%s&metricKeys=alert_status,bugs,reliability_rating,vulnerabilities,security_rating,code_smells,sqale_rating,duplicated_lines_density,coverage,ncloc,ncloc_language_distribution",
-		sonarUrl, projectName))
+		sonarUrl, projectKey))
 	measuresObj := make(map[string]interface{})
 	if err := json.NewDecoder(resp.Body).Decode(&measuresObj); err == nil {
 		measures := measuresObj["measures"].([]interface{})
@@ -60,7 +62,7 @@ func dingTalkHandler(w http.ResponseWriter, r *http.Request) {
 		// 钉钉消息
 		sendUrl = fmt.Sprintf("https://oapi.dingtalk.com/robot/send?access_token=%s", accessToken)
 
-		messageUrl = fmt.Sprintf("%s/dashboard?id=%s", sonarUrl, projectName)
+		messageUrl = fmt.Sprintf("%s/dashboard?id=%s", sonarUrl, projectKey)
 
 		text = fmt.Sprintf("%s[%s]代码扫描结果：BUG数：%s个，漏洞数：%s个，异味数：%s个，覆盖率：%s%%，重复率：%s%%",
 			projectName, branchName, totalBugs, vulnerabilities, codeSmells, coverage, duplicatedLinesDensity)
