@@ -2,38 +2,13 @@
 
 ## 仓库地址
 
-[https://github.com/viodo/sonar-dingtalk-plugin](https://github.com/viodo/sonar-dingtalk-plugin)
+[https://github.com/xbmlz/sonar-dingtalk-plugin](https://github.com/xbmlz/sonar-dingtalk-plugin)
 
 觉得有用的别忘了点个star哦 _
 
 ## 使用方法
 
-### 1. 部署插件
 
-#### Windows
-
-双击运行即可
-
-[sonar-dingtalk-plugin-windows.exe](https://github.com/viodo/sonar-dingtalk-plugin/releases/download/v1.0.0/sonar-dingtalk-plugin-1.0.0-win.exe)
-
-#### Linux
-
-```
-wget https://github.com/viodo/sonar-dingtalk-plugin/releases/download/v1.0.0/sonar-dingtalk-plugin-1.0.0-linux
-
-chmod 777 sonar-dingtalk-plugin-1.0.0-linux
-
-nohup ./sonar-dingtalk-plugin-1.0.0-linux &
-```
-#### Mac
-
-```shell
-wget https://github.com/viodo/sonar-dingtalk-plugin/releases/download/v1.0.0/sonar-dingtalk-plugin-1.0.0-mac
-
-chmod 777 sonar-dingtalk-plugin-1.0.0-mac
-
-nohup ./sonar-dingtalk-plugin-1.0.0-mac &
-```
 
 ### 2. 添加钉钉群机器人
 

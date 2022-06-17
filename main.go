@@ -3,16 +3,22 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
 )
+
+const ERROR_MSG = "ERROR"
+
+var httpClient = &http.Client{}
 
 // dingTalkHandler
 func dingTalkHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	sonarRsp := make(map[string]interface{})
 	accessToken := r.Form.Get("access_token")
+	sonarToken := r.Form.Get("sonar_token")
 	if err := json.NewDecoder(r.Body).Decode(&sonarRsp); err != nil {
 		r.Body.Close()
 		log.Fatal(err)
@@ -31,8 +37,21 @@ func dingTalkHandler(w http.ResponseWriter, r *http.Request) {
 	var sendUrl, text, picUrl, messageUrl string
 
 	// get sonar info
-	resp, _ := http.Get(fmt.Sprintf("%s/api/measures/search?projectKeys=%s&metricKeys=alert_status,bugs,reliability_rating,vulnerabilities,security_rating,code_smells,sqale_rating,duplicated_lines_density,coverage,ncloc,ncloc_language_distribution",
-		sonarUrl, projectKey))
+	url := fmt.Sprintf("%s/api/measures/search?projectKeys=%s&metricKeys=alert_status,bugs,reliability_rating,vulnerabilities,security_rating,code_smells,sqale_rating,duplicated_lines_density,coverage,ncloc,ncloc_language_distribution", sonarUrl, projectKey)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return
+	}
+	if sonarToken != "" {
+		req.SetBasicAuth(sonarToken, "")
+	}
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		fmt.Printf("request measures error: %v\n", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "request measures error: %v", err)
+		return
+	}
 	measuresObj := make(map[string]interface{})
 	if err := json.NewDecoder(resp.Body).Decode(&measuresObj); err == nil {
 		measures := measuresObj["measures"].([]interface{})
@@ -54,7 +73,7 @@ func dingTalkHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		// 成功失败标志
-		if "ERROR" == alertStatus {
+		if ERROR_MSG == alertStatus {
 			picUrl = "http://s1.ax1x.com/2020/10/29/BGMZwD.png"
 		} else {
 			picUrl = "http://s1.ax1x.com/2020/10/29/BGMeTe.png"
@@ -64,7 +83,7 @@ func dingTalkHandler(w http.ResponseWriter, r *http.Request) {
 
 		messageUrl = fmt.Sprintf("%s/dashboard?id=%s", sonarUrl, projectKey)
 
-		text = fmt.Sprintf("%s[%s]代码扫描结果：BUG数：%s个，漏洞数：%s个，异味数：%s个，覆盖率：%s%%，重复率：%s%%",
+		text = fmt.Sprintf("%s[%s]代码扫描结果: BUG数: %s个, 漏洞数：%s个, 异味数：%s个, 覆盖率: %s%%，重复率: %s%%",
 			projectName, branchName, totalBugs, vulnerabilities, codeSmells, coverage, duplicatedLinesDensity)
 
 		link := make(map[string]string)
@@ -85,7 +104,8 @@ func dingTalkHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	flag.Parse()
 	http.HandleFunc("/dingtalk", dingTalkHandler)
-	log.Println("Server started on port(s): 9001 (http)")
-	log.Fatal(http.ListenAndServe(":9001", nil))
+	log.Println("Server started on port(s): 0.0.0.0:9001 (http)")
+	log.Fatal(http.ListenAndServe("0.0.0.0:9001", nil))
 }
