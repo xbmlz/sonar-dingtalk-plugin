@@ -6,7 +6,7 @@ COPY --from=tonistiigi/xx:golang / /
 COPY . /sonar-dingtalk-plugin-src
 RUN go mod download && \
     make docker && \
-    mv ./bin/sonar-dingtalk-plugin /sonar-dingtalk-plugin
+    mv ./bin/sonar-dingtalk-plugin-docker /sonar-dingtalk-plugin
 
 FROM alpine:latest
 LABEL org.opencontainers.image.source="https://github.com/xbmlz/sonar-dingtalk-plugin"
