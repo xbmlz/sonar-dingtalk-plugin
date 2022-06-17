@@ -106,6 +106,6 @@ func dingTalkHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	flag.Parse()
 	http.HandleFunc("/dingtalk", dingTalkHandler)
-	log.Println("Server started on port(s): 0.0.0.0:9001 (http)")
-	log.Fatal(http.ListenAndServe("0.0.0.0:9001", nil))
+	log.Println("Server started on port(s): 0.0.0.0:9010 (http)")
+	log.Fatal(http.ListenAndServe("0.0.0.0:9010", nil))
 }
