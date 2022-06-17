@@ -38,7 +38,7 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: Dreamacro
+          username: xbmlz
           password: ${{ secrets.PACKAGE_TOKEN }}
 
       - name: Build dev branch and push
@@ -48,7 +48,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           push: true
-          tags: 'dreamacro/clash:dev,ghcr.io/dreamacro/clash:dev'
+          tags: 'xbmlz/sonar-dingtalk-plugin:dev,ghcr.io/xbmlz/sonar-dingtalk-plugin:dev'
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -60,10 +60,10 @@ jobs:
           script: |
             const ref = context.payload.ref.replace(/\/?refs\/tags\//, '')
             const tags = [
-              'dreamacro/clash:latest',
-              `dreamacro/clash:${ref}`,
-              'ghcr.io/dreamacro/clash:latest',
-              `ghcr.io/dreamacro/clash:${ref}`
+              'xbmlz/sonar-dingtalk-plugin:latest',
+              `xbmlz/sonar-dingtalk-plugin:${ref}`,
+              'ghcr.io/xbmlz/sonar-dingtalk-plugin:latest',
+              `ghcr.io/xbmlz/sonar-dingtalk-plugin:${ref}`
             ]
             return tags.join(',')
           result-encoding: string
