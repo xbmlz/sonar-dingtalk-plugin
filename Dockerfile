@@ -1,5 +1,6 @@
 FROM golang:alpine as builder
 
+RUN apk add --no-cache make git
 WORKDIR /sonar-dingtalk-plugin-src
 COPY --from=tonistiigi/xx:golang / /
 COPY . /sonar-dingtalk-plugin-src
