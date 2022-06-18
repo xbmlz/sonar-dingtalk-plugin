@@ -11,6 +11,7 @@
 ```dockerfile
 docker run \
 -d \
+--name=sonar-dingtalk-plugin \
 --restart=always \
 -p 9010:9010 \
 xbmlz/sonar-dingtalk-plugin
@@ -20,9 +21,9 @@ xbmlz/sonar-dingtalk-plugin
 
 根据对应操作系统下载 [Release](https://github.com/xbmlz/sonar-dingtalk-plugin/releases)文件，解压启动即可。
 
-### 设置
+## 设置
 
-#### 添加钉钉机器人
+### 添加钉钉机器人
 
 1. 打开钉钉[群设置]——[智能群助手]——[添加机器人]——[自定义]
 
@@ -34,7 +35,7 @@ xbmlz/sonar-dingtalk-plugin
 
 4. 点击完成后将Webhook地址中`access_token=`后面的内容复制保存下来（类似https://oapi.dingtalk.com/robot/send?access_token=xxxxxxx）
 
-#### SonarQube设置
+### SonarQube设置
 
 1. 进入项目，点击[项目配置]——[网络调用]——[创建]
 
@@ -43,10 +44,10 @@ xbmlz/sonar-dingtalk-plugin
 2. 名称填写任意值，如`DingTalk`，URL填写 
 
    ```bash
-   http://[插件安装电脑ip]:9010/dingtalk?dingtalk_token=[配置钉钉机器人时保存的access_token]&sonar_token=[sonar的token]
+   http://[插件安装电脑ip]:9010/dingtalk?access_token=[配置钉钉机器人时保存的access_token]&sonar_token=[sonar的token]
    ```
 
-   ![image-20220618140049198](https://cdn.jsdelivr.net/gh/xbmlz/static@main/img/202206181400234.png)
+   ![](https://cdn.jsdelivr.net/gh/xbmlz/static@main/img/202206181500350.png)
 
    注意：sonar没有开启权限验证时不需要填写
 

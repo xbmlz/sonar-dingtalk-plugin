@@ -10,13 +10,13 @@ import (
 
 var httpClient = &http.Client{}
 
-// indexHandler
-func indexHandler(w http.ResponseWriter, r *http.Request) {
+// dingtalkHandler
+func dingtalkHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	sonarRsp := make(map[string]interface{})
-	dingTalkToken := r.Form.Get("dingtalk_token")
-	if dingTalkToken == "" {
-		fmt.Fprintf(w, "access_token 不能为空")
+	accessToken := r.Form.Get("access_token")
+	if accessToken == "" {
+		fmt.Fprintf(w, "access_token不能为空")
 		return
 	}
 	sonarToken := r.Form.Get("sonar_token")
@@ -72,7 +72,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		picUrl = "http://s1.ax1x.com/2020/10/29/BGMZwD.png"
 	}
 	// 发送钉钉消息
-	msgUrl := fmt.Sprintf("https://oapi.dingtalk.com/robot/send?access_token=%s", dingTalkToken)
+	msgUrl := fmt.Sprintf("https://oapi.dingtalk.com/robot/send?access_token=%s", accessToken)
 
 	messageUrl := fmt.Sprintf("%s/dashboard?id=%s", serverUrl, projectKey)
 
@@ -100,7 +100,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/dingtalk", dingtalkHandler)
 	log.Println("Server started on port(s): 0.0.0.0:9010 (http)")
 	log.Fatal(http.ListenAndServe("0.0.0.0:9010", nil))
 }
