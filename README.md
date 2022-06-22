@@ -15,6 +15,15 @@ docker run \
 --restart=always \
 -p 9010:9010 \
 xbmlz/sonar-dingtalk-plugin
+
+# 使用代理
+docker run \
+-d \
+--name=sonar-dingtalk-plugin \
+--restart=always \
+-p 9010:9010 \
+-e HTTPS_PROXY=http://username:password@ip:port \
+xbmlz/sonar-dingtalk-plugin
 ```
 
 #### 二进制安装

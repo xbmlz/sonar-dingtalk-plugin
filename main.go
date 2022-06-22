@@ -8,22 +8,18 @@ import (
 	"net/http"
 )
 
-var httpClient = &http.Client{}
-
 // dingtalkHandler
 func dingtalkHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	sonarRsp := make(map[string]interface{})
 	accessToken := r.Form.Get("access_token")
+	sonarToken := r.Form.Get("sonar_token")
 	if accessToken == "" {
 		fmt.Fprintf(w, "access_token不能为空")
-		return
 	}
-	sonarToken := r.Form.Get("sonar_token")
 	if err := json.NewDecoder(r.Body).Decode(&sonarRsp); err != nil {
 		r.Body.Close()
-		log.Fatal(err)
-		fmt.Fprintf(w, "解析Sonar参数错误")
+		fmt.Fprintf(w, "解析Sonar参数错误:"+err.Error())
 		return
 	}
 
@@ -31,7 +27,13 @@ func dingtalkHandler(w http.ResponseWriter, r *http.Request) {
 	projectName := sonarRsp["project"].(map[string]interface{})["name"]
 	projectKey := sonarRsp["project"].(map[string]interface{})["key"]
 	branch := sonarRsp["branch"].(map[string]interface{})["name"]
-
+	// create http client
+	httpClient := &http.Client{
+		Transport: &http.Transport{
+			// 设置代理 HTTPS_PROXY
+			Proxy: http.ProxyFromEnvironment,
+		},
+	}
 	// get measures info
 	url := fmt.Sprintf("%s/api/measures/search?projectKeys=%s&metricKeys=alert_status,bugs,reliability_rating,vulnerabilities,security_rating,code_smells,sqale_rating,duplicated_lines_density,coverage,ncloc,ncloc_language_distribution",
 		serverUrl, projectKey)
@@ -41,14 +43,14 @@ func dingtalkHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	measuresRsp, err := httpClient.Do(req)
 	if err != nil {
-		fmt.Fprintf(w, "获取measures失败")
+		fmt.Fprintf(w, "获取measures失败: "+err.Error())
 		return
 	}
 	measuresObj := make(map[string]interface{})
 	if err := json.NewDecoder(measuresRsp.Body).Decode(&measuresObj); err != nil {
 		measuresRsp.Body.Close()
-		log.Fatal(err)
-		fmt.Fprintf(w, "解析Measures失败")
+		fmt.Fprintf(w, "解析Measures失败: "+err.Error())
+		return
 	}
 
 	measures := measuresObj["measures"].([]interface{})
