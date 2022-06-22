@@ -16,7 +16,7 @@ docker run \
 -p 9010:9010 \
 xbmlz/sonar-dingtalk-plugin
 
-# 代理
+# 使用代理
 docker run \
 -d \
 --name=sonar-dingtalk-plugin \
