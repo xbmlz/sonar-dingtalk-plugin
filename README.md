@@ -72,4 +72,5 @@ xbmlz/sonar-dingtalk-plugin
 
 完成上述步骤，就可以将sonarqube扫描结果，推送到钉钉群了
 
-![](https://cdn.jsdelivr.net/gh/xbmlz/static@main/img/202206181406084.png)
+<img width="451" alt="iShot" src="https://github.com/viewhang/sonar-dingtalk-plugin/assets/26957298/a41f7be5-509c-4015-bf88-ef8e681df40b">
+
