@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 )
 
 // dingtalkHandler
@@ -35,9 +36,9 @@ func dingtalkHandler(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 	// get measures info
-	url := fmt.Sprintf("%s/api/measures/search?projectKeys=%s&metricKeys=alert_status,bugs,reliability_rating,vulnerabilities,security_rating,code_smells,sqale_rating,duplicated_lines_density,coverage,ncloc,ncloc_language_distribution",
+	sonarUrl := fmt.Sprintf("%s/api/measures/search?projectKeys=%s&metricKeys=alert_status,bugs,reliability_rating,vulnerabilities,security_rating,code_smells,sqale_rating,duplicated_lines_density,coverage,ncloc,ncloc_language_distribution",
 		serverUrl, projectKey)
-	req, _ := http.NewRequest("GET", url, nil)
+	req, _ := http.NewRequest("GET", sonarUrl, nil)
 	if sonarToken != "" {
 		req.SetBasicAuth(sonarToken, "")
 	}
@@ -67,27 +68,29 @@ func dingtalkHandler(w http.ResponseWriter, r *http.Request) {
 	vulnerabilities := (measures[10].(map[string]interface{}))["value"].(string)
 
 	// 成功失败标志
-	var picUrl string
+	var statusText string
 	if alertStatus == "OK" {
-		picUrl = "http://s1.ax1x.com/2020/10/29/BGMeTe.png"
+		statusText = "<font color=\"#008000\">正常</font>"
 	} else {
-		picUrl = "http://s1.ax1x.com/2020/10/29/BGMZwD.png"
+		statusText = "<font color=\"#f90202\">异常</font>"
 	}
 	// 发送钉钉消息
 	msgUrl := fmt.Sprintf("https://oapi.dingtalk.com/robot/send?access_token=%s", accessToken)
 
 	messageUrl := fmt.Sprintf("%s/dashboard?id=%s", serverUrl, projectKey)
 
-	link := make(map[string]string)
-	link["title"] = fmt.Sprintf("%s[%s]代码扫描报告", projectName, branch)
-	link["text"] = fmt.Sprintf("Bugs: %s | 漏洞: %s | 异味: %s\r覆盖率: %s%%\r重复率: %s%%",
-		bugs, vulnerabilities, codeSmells, coverage, duplicatedLinesDensity)
-	link["messageUrl"] = messageUrl
-	link["picUrl"] = picUrl
+	actionCard := make(map[string]string)
+	title := fmt.Sprintf("### %s[%s]代码扫描报告", projectName, branch)
+	actionCard["title"] = title
+	actionCard["text"] = fmt.Sprintf("%s <br/>\n- **状态:** %s \n - **Bugs:** %s \n- **漏洞:** %s \n- **异味:** %s \n- **覆盖率:** %s%% \n- **重复率:** %s%%",
+		title, statusText, bugs, vulnerabilities, codeSmells, coverage, duplicatedLinesDensity)
+	actionCard["btnOrientation"] = "0"
+	actionCard["singleURL"] = fmt.Sprintf("dingtalk://dingtalkclient/page/link?url=%s&&pc_slide=false", url.QueryEscape(messageUrl))
+	actionCard["singleTitle"] = "查看详情"
 
 	param := make(map[string]interface{})
-	param["msgtype"] = "link"
-	param["link"] = link
+	param["msgtype"] = "actionCard"
+	param["actionCard"] = actionCard
 
 	// send dingtalk message
 	paramBytes, _ := json.Marshal(param)
@@ -95,7 +98,7 @@ func dingtalkHandler(w http.ResponseWriter, r *http.Request) {
 	dingTalkObj := make(map[string]interface{})
 	json.NewDecoder(dingTalkRsp.Body).Decode(&dingTalkObj)
 	if dingTalkObj["errcode"].(float64) != 0 {
-		fmt.Fprint(w, "消息推送失败，请检查钉钉机器人配置")
+		fmt.Fprint(w, "消息推送失败，请检查钉钉机器人配置,错误信息："+dingTalkObj["errmsg"].(string))
 		return
 	}
 	fmt.Fprint(w, "消息推送成功")
